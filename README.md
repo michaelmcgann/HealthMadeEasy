@@ -1,7 +1,9 @@
 # Health Made Easy App 
 
-A Spring Boot REST API for tracking daily nutrition (macros). Plans to extend to support exercise logging.
-The system is built around a clean domain model: Foods are stored per-gram, meals are composed of food items and grams, and daily logs compute total macros.
+A Spring Boot REST API for tracking daily nutrition. Removes all the "fluff" that comes with traditional fitness apps.
+Plans to extend to support exercise logging.
+The system is built around a clean domain model: Foods are stored per-gram, meals are composed of food items and grams, 
+and daily logs compute total macros.
 
 ## Project Goal
 Build a maintainable, deployable backend service that supports:
