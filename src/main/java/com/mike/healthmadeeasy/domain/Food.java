@@ -27,8 +27,8 @@ public class Food {
                  BigDecimal carbsPerGram,
                  BigDecimal fatPerGram) {
 
-        this.id = id;
-        this.name = name;
+        this.id              = Objects.requireNonNull( id,"id" );
+        this.name            = Objects.requireNonNull( name, "name" );
         this.caloriesPerGram = Objects.requireNonNull( caloriesPerGram, "caloriesPerGram" );
         this.proteinPerGram  = Objects.requireNonNull( proteinPerGram, "proteinPerGram" );
         this.carbsPerGram    = Objects.requireNonNull( carbsPerGram, "carbsPerGram" );
