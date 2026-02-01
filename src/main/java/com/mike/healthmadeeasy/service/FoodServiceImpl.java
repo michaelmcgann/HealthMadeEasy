@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public class FoodServiceImpl implements FoodService {
+public abstract class FoodServiceImpl implements FoodService {
 
     //////////////////////////////////
     /// FIELDS (dependencies)
@@ -58,7 +58,8 @@ public class FoodServiceImpl implements FoodService {
         // 6) Return domain
         // - return food;
 
-
+        // temp return food
+        return null;
     }
 
 }
