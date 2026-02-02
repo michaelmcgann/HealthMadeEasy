@@ -2,22 +2,29 @@ package com.mike.healthmadeeasy.service;
 
 import com.mike.healthmadeeasy.domain.Food;
 import com.mike.healthmadeeasy.dto.request.FoodCreateRequest;
+import com.mike.healthmadeeasy.exception.FoodNotFoundException;
 import com.mike.healthmadeeasy.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.UUID;
+
 
 @Service
-public abstract class FoodServiceImpl implements FoodService {
+public class FoodServiceImpl implements FoodService {
 
     //////////////////////////////////
-    /// FIELDS (dependencies)
+    /// FIELDS AND CONSTANTS
     //////////////////////////////////
 
-//    private final FoodRepository foodRepository;
+    private final FoodRepository foodRepository;
+    private static final int SCALE = 7;
+    private static final RoundingMode ROUNDING = RoundingMode.HALF_UP;
 
-    public FoodServiceImpl( /*FoodRepository foodRepository*/ ) {
-//        this.foodRepository = foodRepository;
+    public FoodServiceImpl( FoodRepository foodRepository ) {
+        this.foodRepository = foodRepository;
     }
 
     //////////////////////////////////
@@ -27,39 +34,44 @@ public abstract class FoodServiceImpl implements FoodService {
     @Override
     public Food create( FoodCreateRequest request ) {
 
-        // 1) Extract & sanitize inputs
-        // - String name = req.getName().trim();
-        // - int referenceGrams = req.getReferenceGrams();
-        // - BigDecimal calories = req.getCalories();
-        // - BigDecimal protein  = req.getProtein();
-        // - BigDecimal carbs    = req.getCarbs();
-        // - BigDecimal fat      = req.getFat();
-        String name         = request.getName().trim();
-        int referenceGrams  = request.getReferenceGrams();
-        BigDecimal calories = request.getCalories();
-        BigDecimal protein  = request.getProtein();
-        BigDecimal carbs    = request.getCarbs();
-        BigDecimal fat      = request.getFat();
+        String name                = request.getName().trim();
+        BigDecimal caloriesPerGram = normalisePerGram(request.getCalories(), request.getReferenceGrams());
+        BigDecimal proteinPerGram  = normalisePerGram(request.getProtein(), request.getReferenceGrams());
+        BigDecimal carbsPerGram    = normalisePerGram(request.getCarbs(), request.getReferenceGrams());
+        BigDecimal fatPerGram      = normalisePerGram(request.getFat(), request.getReferenceGrams());
 
+        UUID id = UUID.randomUUID();
+        Food food = new Food(id, name, caloriesPerGram, proteinPerGram, carbsPerGram, fatPerGram);
 
-        // 3) Convert totals-per-referenceGrams into per-gram macros
-        // - BigDecimal caloriesPerGram = normalizePerGram(calories, referenceGrams);
-        // - BigDecimal proteinPerGram  = normalizePerGram(protein,  referenceGrams);
-        // - BigDecimal carbsPerGram    = normalizePerGram(carbs,    referenceGrams);
-        // - BigDecimal fatPerGram      = normalizePerGram(fat,      referenceGrams);
+        return foodRepository.save(food);
+    }
 
-        // 4) Create domain object (immutable)
-        // - UUID id = UUID.randomUUID();
-        // - Food food = new Food(id, name, caloriesPerGram, proteinPerGram, carbsPerGram, fatPerGram);
+    @Override
+    public Food get(UUID id) {
+        return foodRepository.findById(id).orElseThrow(() -> new FoodNotFoundException(id.toString()));
+    }
 
-        // 5) Persist (later)
-        // - foodRepository.save(food);
+    @Override
+    public List<Food> list() {
+        return foodRepository.findAll();
+    }
 
-        // 6) Return domain
-        // - return food;
+    @Override
+    public void delete(UUID id) {
+        Food food = foodRepository.deleteById(id);
+        if (food == null) throw new FoodNotFoundException(id.toString());
+    }
 
-        // temp return food
-        return null;
+    //////////////////////////////////
+    /// HELPER FUNCTIONS
+    //////////////////////////////////
+
+    private static BigDecimal normalisePerGram(BigDecimal macro, int referenceGram) {
+        if (referenceGram <= 0) throw new IllegalArgumentException("Reference grams must be > 0");
+
+        BigDecimal grams = BigDecimal.valueOf(referenceGram);
+
+        return macro.divide(grams, SCALE, ROUNDING);
     }
 
 }

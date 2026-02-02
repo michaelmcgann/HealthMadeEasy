@@ -14,10 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -178,11 +175,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(FoodNotFoundException.class)
     public ResponseEntity<ProblemDetail> handleFoodNotFound(FoodNotFoundException exception,
                                                             HttpServletRequest request) {
+        String id = exception.getMessage();
 
         ProblemDetail problemDetail = baseProblem(
                 HttpStatus.NOT_FOUND,
                 "Food Not Found",
-                exception.getMessage(),
+                "Food with ID " + id + " not found",
                 request
         );
 
