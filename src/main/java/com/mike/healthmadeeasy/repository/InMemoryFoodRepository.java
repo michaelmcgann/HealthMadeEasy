@@ -33,8 +33,8 @@ public class InMemoryFoodRepository implements FoodRepository {
     }
 
     @Override
-    public Food deleteById(UUID id) {
-        return store.remove(id);
+    public void deleteById(UUID id) {
+        store.remove(id);
     }
 
 }

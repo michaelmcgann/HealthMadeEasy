@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -58,8 +59,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void delete(UUID id) {
-        Food food = foodRepository.deleteById(id);
-        if (food == null) throw new FoodNotFoundException(id.toString());
+        foodRepository.findById(id).orElseThrow(() -> new FoodNotFoundException(id.toString()));
+        foodRepository.deleteById(id);
     }
 
     //////////////////////////////////

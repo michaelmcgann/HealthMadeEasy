@@ -16,6 +16,6 @@ public interface FoodRepository {
 
     boolean existsById(UUID id);
 
-    Food deleteById(UUID id);
+    void deleteById(UUID id);
 
 }
