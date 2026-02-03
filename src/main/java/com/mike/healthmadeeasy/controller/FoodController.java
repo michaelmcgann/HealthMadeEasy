@@ -4,21 +4,16 @@ import com.mike.healthmadeeasy.domain.Food;
 import com.mike.healthmadeeasy.dto.request.FoodCreateRequest;
 import com.mike.healthmadeeasy.dto.response.FoodResponse;
 import com.mike.healthmadeeasy.service.FoodService;
-import com.mike.healthmadeeasy.service.FoodServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/food")
 public class FoodController {
-
-    // REMEMBER @Valid
 
     //////////////////////////////////
     /// FIELDS
@@ -45,6 +40,24 @@ public class FoodController {
         URI location = URI.create("/api/food/" + createdFood.getId());
         return ResponseEntity.created(location).body(response);
     }
+
+    @GetMapping
+    public ResponseEntity<List<FoodResponse>> getAll() {
+        List<Food> foodList = foodService.list();
+
+        List<FoodResponse> foodResponseList = foodList.stream()
+                .map(FoodController::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(foodResponseList);
+
+    }
+
+    @GetMapping
+    public ResponseEntity<FoodResponse> findById() {
+        Food food = foodService.get();
+    }
+
 
     //////////////////////////////////
     /// HELPER METHODS

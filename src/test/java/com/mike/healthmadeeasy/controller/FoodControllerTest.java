@@ -10,12 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.awt.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -89,8 +91,52 @@ public class FoodControllerTest {
                 .andExpect(jsonPath("$.errors.name").isArray());
 
         verifyNoInteractions(foodService);
+    }
+
+    @Test
+    void getAll_returns200_andListOfFoods() throws Exception {
+
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+
+        Food food1 = new Food(
+                id1,
+                "Apple",
+                new BigDecimal("0.8"),
+                new BigDecimal("0.02"),
+                new BigDecimal("0.20"),
+                new BigDecimal("0.01")
+        );
+
+        Food food2 = new Food(
+                id2,
+                "Banana",
+                new BigDecimal("0.9"),
+                new BigDecimal("0.01"),
+                new BigDecimal("0.23"),
+                new BigDecimal("0.00")
+        );
+
+        when(foodService.list()).thenReturn(List.of(food1, food2));
+
+        mockMvc.perform(get("/api/food").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(id1.toString()))
+                .andExpect(jsonPath("$[0].name").value("Apple"))
+                .andExpect(jsonPath("$[0].caloriesPerGram").value(0.8))
+                .andExpect(jsonPath("$[1].id").value(id2.toString()))
+                .andExpect(jsonPath("$[1].name").value("Banana"))
+                .andExpect(jsonPath("$[1].carbsPerGram").value(0.23));
+
+        verify(foodService, times((1))).list();
+        verifyNoMoreInteractions(foodService);
 
     }
+
+    @Test
+    void get
 
 }
 
