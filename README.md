@@ -5,6 +5,9 @@ Plans to extend to support exercise logging.
 The system is built around a clean domain model: Foods are stored per-gram, meals are composed of food items and grams, 
 and daily logs compute total macros.
 
+Swagger UI can be accessed through the lin below once cloned and started app.
+http://localhost:8080/swagger-ui/index.html
+
 ## Project Goal
 Build a maintainable, deployable backend service that supports:
 - Creating reusable foods (Converted and stored per-gram for easy future logging)
