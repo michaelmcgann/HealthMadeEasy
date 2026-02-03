@@ -14,8 +14,8 @@ Build a maintainable, deployable backend service that supports:
 - Secure multi-user ownership (users only see their own data)
 
 ## Status
-- Current: Sprint 0 foundation (app skeleton, health endpoint, initial docs)
-- Next: Food model + CRUD, then persistence and migrations, then meals and logging, then auth
+- Current: Sprint 1 - MVC for Food model with unit testing and Swagger UI with temp in memory storage.
+- Next: Implementing persistence with Postgres and Flyway migrations.
 
 ## Architecture (high level)
 Layered Spring Boot application:
