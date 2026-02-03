@@ -1,6 +1,7 @@
 package com.mike.healthmadeeasy.controller;
 
 import com.mike.healthmadeeasy.domain.Food;
+import com.mike.healthmadeeasy.exception.FoodNotFoundException;
 import com.mike.healthmadeeasy.service.FoodService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FoodController.class)
@@ -58,11 +58,11 @@ public class FoodControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/api/food")
+        mockMvc.perform(post("/api/foods")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/food/" + id))
+                .andExpect(header().string("Location", "/api/foods/" + id))
                 .andExpect(jsonPath("$.id").value(id.toString()))
                 .andExpect(jsonPath("$.name").value("Apple"))
                 .andExpect(jsonPath("$.caloriesPerGram").value(0.8));
@@ -85,7 +85,7 @@ public class FoodControllerTest {
         }
         """;
 
-        mockMvc.perform(post("/api/food").contentType(MediaType.APPLICATION_JSON).content(json))
+        mockMvc.perform(post("/api/foods").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.title").value("Validation failed"))
                 .andExpect(jsonPath("$.errors.name").isArray());
@@ -119,7 +119,7 @@ public class FoodControllerTest {
 
         when(foodService.list()).thenReturn(List.of(food1, food2));
 
-        mockMvc.perform(get("/api/food").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/foods").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -136,7 +136,93 @@ public class FoodControllerTest {
     }
 
     @Test
-    void get
+    void getById_returns200_andFoodBody() throws Exception {
+
+        UUID id = UUID.randomUUID();
+        Food food = new Food(
+                id,
+                "Apple",
+                new BigDecimal("0.8"),
+                new BigDecimal("0.02"),
+                new BigDecimal("0.20"),
+                new BigDecimal("0.01")
+        );
+
+        when(foodService.get(id)).thenReturn(food);
+
+        mockMvc.perform(get("/api/foods/{id}", id).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(id.toString()))
+                .andExpect(jsonPath("$.caloriesPerGram").value(0.8))
+                .andExpect(jsonPath("$.name").value("Apple"));
+
+        verify(foodService, times(1)).get(id);
+        verifyNoMoreInteractions(foodService);
+    }
+
+    @Test
+    void getId_whenMissing_return404() throws Exception {
+
+        UUID id = UUID.randomUUID();
+
+        when(foodService.get(id)).thenThrow(FoodNotFoundException.class);
+
+        mockMvc.perform(get("/api/foods/{id}", id).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.title").value("Food Not Found"));
+
+        verify(foodService, times(1)).get(id);
+        verifyNoMoreInteractions(foodService);
+
+    }
+
+    @Test
+    void getId__withInvalidUuid_returns400_andDoesNotCallService() throws Exception {
+
+        mockMvc.perform(get("/api/foods/{id}", "Not a UUID").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(foodService);
+    }
+
+    @Test
+    void delete_returns204_andCallsService() throws Exception {
+
+        UUID id = UUID.randomUUID();
+
+        doNothing().when(foodService).delete(id);
+
+        mockMvc.perform(delete("/api/foods/{id}", id))
+                .andExpect(status().isNoContent());
+
+        verify(foodService, times(1)).delete(id);
+        verifyNoMoreInteractions(foodService);
+    }
+
+    @Test
+    void delete_whenMissing_returns404() throws Exception {
+
+        UUID id = UUID.randomUUID();
+
+        doThrow(new FoodNotFoundException(id.toString())).when(foodService).delete(id);
+
+        mockMvc.perform(delete("/api/foods/{id}", id))
+                .andExpect(status().isNotFound());
+
+        verify(foodService, times(1)).delete(id);
+        verifyNoMoreInteractions(foodService);
+    }
+
+    @Test
+    void delete_withInvalidUuid_returns400_andDoesNotCallService() throws Exception {
+
+        mockMvc.perform(delete("/api/foods/{id}", "Not a UUID"))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(foodService);
+
+    }
 
 }
 

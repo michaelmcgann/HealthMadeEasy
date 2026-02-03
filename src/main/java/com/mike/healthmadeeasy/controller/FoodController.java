@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/food")
+@RequestMapping("/api/foods")
 public class FoodController {
 
     //////////////////////////////////
@@ -37,7 +38,7 @@ public class FoodController {
     public ResponseEntity<FoodResponse> create(@Valid @RequestBody FoodCreateRequest request) {
         Food createdFood = foodService.create(request);
         FoodResponse response = toResponse(createdFood);
-        URI location = URI.create("/api/food/" + createdFood.getId());
+        URI location = URI.create("/api/foods/" + createdFood.getId());
         return ResponseEntity.created(location).body(response);
     }
 
@@ -53,11 +54,17 @@ public class FoodController {
 
     }
 
-    @GetMapping
-    public ResponseEntity<FoodResponse> findById() {
-        Food food = foodService.get();
+    @GetMapping("/{id}")
+    public ResponseEntity<FoodResponse> getById(@PathVariable UUID id) {
+        Food food = foodService.get(id);
+        return ResponseEntity.ok(toResponse(food));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        foodService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
     //////////////////////////////////
     /// HELPER METHODS
