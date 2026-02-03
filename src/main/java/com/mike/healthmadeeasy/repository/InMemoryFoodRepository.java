@@ -9,7 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class InMemoryFoodRepository implements FoodRepository {
 
+    //////////////////////////////////
+    /// FIELDS
+    //////////////////////////////////
+
     private final Map<UUID, Food> store = new ConcurrentHashMap<>();
+
+    //////////////////////////////////
+    /// METHODS
+    //////////////////////////////////
 
     @Override
     public Food save(Food food ){
