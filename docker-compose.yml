@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: healthmadeeasy-postgres
+    environment:
+      POSTGRES_BD: healthmadeeasy
+      POSTGRES_USER: healthmadeeasy
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - healthmadeeasy_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U healthmadeeasy -d healthmadeeasy"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  healthmadeeasy_pgdata:
