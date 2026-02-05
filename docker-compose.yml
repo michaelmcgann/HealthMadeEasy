@@ -3,11 +3,11 @@ services:
     image: postgres:16
     container_name: healthmadeeasy-postgres
     environment:
-      POSTGRES_BD: healthmadeeasy
+      POSTGRES_DB: healthmadeeasy
       POSTGRES_USER: healthmadeeasy
       POSTGRES_PASSWORD: devpassword
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - healthmadeeasy_pgdata:/var/lib/postgresql/data
     healthcheck:

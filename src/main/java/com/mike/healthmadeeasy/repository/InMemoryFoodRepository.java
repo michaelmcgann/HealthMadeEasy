@@ -1,12 +1,14 @@
 package com.mike.healthmadeeasy.repository;
 
 import com.mike.healthmadeeasy.domain.Food;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
+@Profile("inmemory")
 public class InMemoryFoodRepository implements FoodRepository {
 
     //////////////////////////////////
