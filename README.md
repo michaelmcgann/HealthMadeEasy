@@ -8,6 +8,28 @@ and daily logs compute total macros.
 Swagger UI can be accessed through the link below once app has started.
 http://localhost:8080/swagger-ui/index.html
 
+## Storage profiles
+
+This project supports two storage modes via Spring profiles:
+
+### Default: in-memory (no setup)
+By default the app runs with the inmemory profile (no database required).
+This is ideal for quickly cloning and running the API.
+
+### Local Postgres (persistent)
+To use Postgres locally (data persists across app restarts):
+1. Start Postgres with Docker:
+ - docker compose up -d
+2. Run the app with the postgres profile:
+ - ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=postgres"
+
+(If you run from IntelliJ, add --spring.profiles.active=postgres to Program Arguments, 
+or set SPRING_PROFILES_ACTIVE=postgres.)
+
+### Deployment note
+In production/deployment, the app will also use the postgres profile, but it will connect to an external managed 
+Postgres database (e.g., Neon/Render/etc.) via environment configuration rather than the local Docker container.
+
 ## Project Goal
 Build a maintainable, deployable backend service that supports:
 - Creating reusable foods (Converted and stored per-gram for easy future logging)
@@ -17,8 +39,7 @@ Build a maintainable, deployable backend service that supports:
 - Secure multi-user ownership (users only see their own data)
 
 ## Status
-- Current: Sprint 1 - MVC for Food model with unit testing and Swagger UI with temp in memory storage.
-- Next: Implementing persistence with Postgres and Flyway migrations.
+- Current: Sprint 2: Persistence (Postgres) and Flyway migrations & Testcontainers integration tests
 
 ## Architecture (high level)
 Layered Spring Boot application:
@@ -29,13 +50,10 @@ Layered Spring Boot application:
 
 ## Tech Stack
 
-### Current (already in repo)
 - Java 21
 - Spring Boot (Web MVC)
 - Maven
 - Spring Boot Actuator
-
-### Planned / In Progress 
 - OpenAPI / Swagger UI (API documentation & manual testing)
 - PostgreSQL (production database)
 - Flyway (schema migrations)
