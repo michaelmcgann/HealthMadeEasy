@@ -63,7 +63,7 @@ public class FoodApiPostgresIntegrationTest {
 
     @BeforeEach
     void cleanDb() {
-        jdbc.execute("TRUNCATE TABLE foods");
+        jdbc.execute("TRUNCATE TABLE foods CASCADE");
     }
 
     @Test
