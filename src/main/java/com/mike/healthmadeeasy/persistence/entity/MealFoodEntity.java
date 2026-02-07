@@ -18,7 +18,31 @@ public class MealFoodEntity {
     @JoinColumn(name = "meal_id", nullable = false)
     private MealEntity meal;
 
-    @Column(name = "position", nullable = false)
-    private int position;
+    //////////////////////////////////
+    /// CONSTRUCTORS
+    //////////////////////////////////
+
+    public MealFoodEntity() {
+    }
+
+    //////////////////////////////////
+    /// GETTERS & SETTERS
+    //////////////////////////////////
+
+    public MealFoodId getId() {
+        return id;
+    }
+
+    public void setId(MealFoodId id) {
+        this.id = id;
+    }
+
+    public MealEntity getMeal() {
+        return meal;
+    }
+
+    public void setMeal(MealEntity meal) {
+        this.meal = meal;
+    }
 
 }

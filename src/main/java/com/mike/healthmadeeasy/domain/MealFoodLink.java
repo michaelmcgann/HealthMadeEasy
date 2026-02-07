@@ -10,15 +10,13 @@ public class MealFoodLink {
     //////////////////////////////////
 
     private final UUID foodId;
-    private final int position;
 
     //////////////////////////////////
     /// CONSTRUCTORS
     //////////////////////////////////
 
-    public MealFoodLink(UUID foodId, int position) {
+    public MealFoodLink(UUID foodId) {
         this.foodId = Objects.requireNonNull(foodId, "foodId");
-        this.position = position;
     }
 
     //////////////////////////////////
@@ -29,7 +27,4 @@ public class MealFoodLink {
         return foodId;
     }
 
-    public int getPosition() {
-        return position;
-    }
 }
