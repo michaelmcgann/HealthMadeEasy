@@ -16,6 +16,4 @@ public interface FoodService {
 
     void delete( UUID id );
 
-
-
 }

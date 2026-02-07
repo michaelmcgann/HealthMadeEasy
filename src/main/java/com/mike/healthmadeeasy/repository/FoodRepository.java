@@ -18,4 +18,6 @@ public interface FoodRepository {
 
     void deleteById(UUID id);
 
+    List<Food> findAllById(Iterable<UUID> ids);
+
 }

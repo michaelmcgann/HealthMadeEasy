@@ -103,5 +103,4 @@ public class PostgresMealRepository implements MealRepository {
 
         return new Meal(entity.getId(), entity.getName(), foodLinkList);
     }
-
 }

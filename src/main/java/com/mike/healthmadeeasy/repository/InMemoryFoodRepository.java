@@ -47,4 +47,15 @@ public class InMemoryFoodRepository implements FoodRepository {
         store.remove(id);
     }
 
+    @Override
+    public List<Food> findAllById(Iterable<UUID> ids) {
+        List<Food> result = new ArrayList<>();
+        for (UUID id : ids) {
+            Food food = store.get(id);
+            if (food != null) result.add(food);
+        }
+        return result;
+    }
+
+
 }

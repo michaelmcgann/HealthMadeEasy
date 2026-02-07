@@ -7,6 +7,7 @@ import com.mike.healthmadeeasy.repository.FoodRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,6 +62,15 @@ public class PostgresFoodRepository implements FoodRepository {
     @Override
     public void deleteById(UUID id) {
         jpa.deleteById(id);
+    }
+
+    @Override
+    public List<Food> findAllById(Iterable<UUID> ids) {
+
+        return jpa.findAllById(ids)
+                .stream()
+                .map(PostgresFoodRepository::toDomain)
+                .toList();
     }
 
     //////////////////////////////////
