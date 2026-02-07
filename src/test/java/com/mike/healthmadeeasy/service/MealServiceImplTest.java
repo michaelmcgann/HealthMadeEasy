@@ -99,7 +99,7 @@ public class MealServiceImplTest {
         verify(foodRepository).findAllById(List.of(foodId1, foodId2));
         verify(mealRepository, never()).save(any(Meal.class));
         verifyNoMoreInteractions(foodRepository, mealRepository);
-        
+
     }
 
 }

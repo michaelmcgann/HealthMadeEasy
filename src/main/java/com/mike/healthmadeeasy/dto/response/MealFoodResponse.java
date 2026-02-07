@@ -8,21 +8,21 @@ public class MealFoodResponse {
     /// FIELDS
     //////////////////////////////////
 
-    private final UUID foodID;
+    private final UUID foodId;
 
     //////////////////////////////////
     /// CONSTRUCTORS
     //////////////////////////////////
 
     public MealFoodResponse(UUID foodID) {
-        this.foodID = foodID;
+        this.foodId = foodID;
     }
 
     //////////////////////////////////
     /// GETTERS (IMMUTABLE)
     //////////////////////////////////
 
-    public UUID getFoodID() {
-        return foodID;
+    public UUID getFoodId() {
+        return foodId;
     }
 }

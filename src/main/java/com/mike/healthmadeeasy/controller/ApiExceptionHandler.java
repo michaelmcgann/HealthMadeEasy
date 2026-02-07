@@ -2,6 +2,7 @@ package com.mike.healthmadeeasy.controller;
 
 import com.mike.healthmadeeasy.exception.BadRequestException;
 import com.mike.healthmadeeasy.exception.FoodNotFoundException;
+import com.mike.healthmadeeasy.exception.MealNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -181,6 +182,20 @@ public class ApiExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 "Food Not Found",
                 "Food with ID " + id + " not found",
+                request
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(MealNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handleMealNotFound(MealNotFoundException exception,
+                                                            HttpServletRequest request) {
+        String id = exception.getMessage();
+        ProblemDetail problemDetail = baseProblem(
+                HttpStatus.NOT_FOUND,
+                "Meal not found.",
+                "Meal with ID " + id + " not found.",
                 request
         );
 
