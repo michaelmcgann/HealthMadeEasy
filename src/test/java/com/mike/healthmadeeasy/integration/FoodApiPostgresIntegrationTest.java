@@ -84,7 +84,7 @@ public class FoodApiPostgresIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", org.hamcrest.Matchers.containsString("/api/foods/")))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value("Chicken Breast"))
+                .andExpect(jsonPath("$.name").value("chicken Breast"))
                 .andReturn().getResponse().getContentAsString();
 
         String id = JsonPath.read(body, "$.id");
@@ -92,7 +92,7 @@ public class FoodApiPostgresIntegrationTest {
         mockMvc.perform(get("/api/foods/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").value("Chicken Breast"));
+                .andExpect(jsonPath("$.name").value("chicken Breast"));
 
         Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM foods", Integer.class);
         assertThat(count).isEqualTo(1);
