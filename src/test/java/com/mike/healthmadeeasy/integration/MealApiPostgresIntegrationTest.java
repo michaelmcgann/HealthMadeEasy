@@ -159,7 +159,7 @@ public class MealApiPostgresIntegrationTest {
         mockMvc.perform(get("/api/meals"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
-        
+
     }
 
 

@@ -34,7 +34,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public Food create( FoodCreateRequest request ) {
 
-        String name                = request.getName().trim();
+        String name                = normalise(request.getName());
         BigDecimal caloriesPerGram = normalisePerGram(request.getCalories(), request.getReferenceGrams());
         BigDecimal proteinPerGram  = normalisePerGram(request.getProtein(), request.getReferenceGrams());
         BigDecimal carbsPerGram    = normalisePerGram(request.getCarbs(), request.getReferenceGrams());
@@ -72,6 +72,10 @@ public class FoodServiceImpl implements FoodService {
         BigDecimal grams = BigDecimal.valueOf(referenceGram);
 
         return macro.divide(grams, SCALE, ROUNDING);
+    }
+
+    private static String normalise(String s) {
+        return s == null ? null : s.trim().replaceAll("\\s+", " ").toLowerCase();
     }
 
 }

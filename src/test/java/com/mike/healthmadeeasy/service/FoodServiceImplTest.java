@@ -32,7 +32,7 @@ public class FoodServiceImplTest {
     void create_trimsName_and_normalisesMacrosPerGram() {
 
         FoodCreateRequest request = new FoodCreateRequest();
-        request.setName("  apple  ");
+        request.setName("  Apple  ");
         request.setReferenceGrams(100);
         request.setCalories(new BigDecimal("80.00"));
         request.setProtein(new BigDecimal("2"));
