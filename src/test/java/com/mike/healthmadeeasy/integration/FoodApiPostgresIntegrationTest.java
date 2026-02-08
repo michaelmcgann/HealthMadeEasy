@@ -97,5 +97,5 @@ public class FoodApiPostgresIntegrationTest {
         Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM foods", Integer.class);
         assertThat(count).isEqualTo(1);
     }
-    
+
 }

@@ -1,6 +1,7 @@
 package com.mike.healthmadeeasy.repository;
 
 import com.mike.healthmadeeasy.domain.Food;
+import com.mike.healthmadeeasy.domain.Meal;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -55,6 +56,21 @@ public class InMemoryFoodRepository implements FoodRepository {
             if (food != null) result.add(food);
         }
         return result;
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return store.values().stream()
+                .map(Food::getName)
+                .anyMatch(name::equals);
+    }
+
+    @Override
+    public boolean existsByNameExcludingId(String name, UUID excludeId) {
+        return store.entrySet().stream()
+                .filter(e -> !e.getKey().equals(excludeId))
+                .map(e -> e.getValue().getName())
+                .anyMatch(name::equals);
     }
 
 
