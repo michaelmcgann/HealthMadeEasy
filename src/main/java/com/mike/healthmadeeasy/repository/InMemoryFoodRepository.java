@@ -1,7 +1,6 @@
 package com.mike.healthmadeeasy.repository;
 
 import com.mike.healthmadeeasy.domain.Food;
-import com.mike.healthmadeeasy.domain.Meal;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
