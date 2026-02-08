@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface FoodJpaRepository extends JpaRepository<FoodEntity, UUID> {
 
-    
+    boolean existsByName(String name);
+
+    boolean existsByNameAndIdNot(String name, UUID id);
 
 }

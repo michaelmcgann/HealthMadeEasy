@@ -20,4 +20,8 @@ public interface FoodRepository {
 
     List<Food> findAllById(Iterable<UUID> ids);
 
+    boolean existsByName(String name);
+
+    boolean existsByNameExcludingId(String name, UUID excludeId);
+
 }

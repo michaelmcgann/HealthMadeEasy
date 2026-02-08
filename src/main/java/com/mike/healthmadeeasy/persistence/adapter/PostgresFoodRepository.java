@@ -73,6 +73,16 @@ public class PostgresFoodRepository implements FoodRepository {
                 .toList();
     }
 
+    @Override
+    public boolean existsByName(String name) {
+        return jpa.existsByName(name);
+    }
+
+    @Override
+    public boolean existsByNameExcludingId(String name, UUID excludeId) {
+        return jpa.existsByNameAndIdNot(name, excludeId);
+    }
+
     //////////////////////////////////
     /// HELPER METHODS
     //////////////////////////////////
