@@ -90,6 +90,16 @@ public class PostgresMealRepository implements MealRepository {
         mealJpaRepository.deleteById(id);
     }
 
+    @Override
+    public boolean existsByName(String name) {
+        return mealJpaRepository.existsByName(name);
+    }
+
+    @Override
+    public boolean existsByNameExcludingId(String name, UUID excludeId) {
+        return mealJpaRepository.existsByNameAndIdNot(name, excludeId);
+    }
+
     //////////////////////////////////
     /// HELPER METHODS
     //////////////////////////////////

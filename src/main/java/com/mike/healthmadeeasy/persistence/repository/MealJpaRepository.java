@@ -11,6 +11,10 @@ import java.util.UUID;
 
 public interface MealJpaRepository extends JpaRepository<MealEntity, UUID> {
 
+    boolean existsByName(String name);
+
+    boolean existsByNameAndIdNot(String name, UUID id);
+
     @Override
     @EntityGraph(attributePaths = "foods")
     @NonNull

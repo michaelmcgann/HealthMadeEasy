@@ -47,4 +47,19 @@ public class InMemoryMealRepository implements MealRepository {
         store.remove(id);
     }
 
+    @Override
+    public boolean existsByName(String name) {
+        return store.values().stream()
+                .map(Meal::getName)
+                .anyMatch(name::equals);
+    }
+
+    @Override
+    public boolean existsByNameExcludingId(String name, UUID excludeId) {
+        return store.entrySet().stream()
+                .filter(e -> !e.getKey().equals(excludeId))
+                .map(e -> e.getValue().getName())
+                .anyMatch(name::equals);
+    }
+
 }

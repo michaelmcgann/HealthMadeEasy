@@ -49,6 +49,8 @@ public class MealServiceImplTest {
         mealCreateRequest.setName("   Breakfast  ");
         mealCreateRequest.setFoods(List.of(mealFoodRequest1, mealFoodRequest2));
 
+        when(mealRepository.existsByName("breakfast")).thenReturn(false);
+
         when(foodRepository.findAllById(List.of(foodId1, foodId2)))
                 .thenReturn(List.of(
                         new Food(foodId1, "Apple", new BigDecimal(0), new BigDecimal(0), new BigDecimal(0), new BigDecimal(0)),
@@ -60,13 +62,14 @@ public class MealServiceImplTest {
         Meal createdMeal = mealService.create(mealCreateRequest);
 
         assertNotNull(createdMeal.getId());
-        assertEquals("Breakfast", createdMeal.getName());
+        assertEquals("breakfast", createdMeal.getName());
         assertEquals(2, createdMeal.getFoods().size());
         assertEquals(foodId1, createdMeal.getFoods().get(0).getFoodId());
         assertEquals(foodId2, createdMeal.getFoods().get(1).getFoodId());
 
         verify(foodRepository).findAllById(List.of(foodId1, foodId2));
         verify(mealRepository).save(any(Meal.class));
+        verify(mealRepository).existsByName("breakfast");
 
         verifyNoMoreInteractions(foodRepository, mealRepository);
 
@@ -92,10 +95,13 @@ public class MealServiceImplTest {
         when(foodRepository.findAllById(List.of(foodId1, foodId2)))
                 .thenReturn(List.of(apple));
 
+        when(mealRepository.existsByName("breakfast")).thenReturn(false);
+
         FoodNotFoundException exception = assertThrows(FoodNotFoundException.class,
                 () -> mealService.create(mealCreateRequest));
 
         assertEquals(foodId2.toString(), exception.getMessage());
+        verify(mealRepository).existsByName("breakfast");
         verify(foodRepository).findAllById(List.of(foodId1, foodId2));
         verify(mealRepository, never()).save(any(Meal.class));
         verifyNoMoreInteractions(foodRepository, mealRepository);

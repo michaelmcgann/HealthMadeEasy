@@ -88,7 +88,7 @@ public class MealApiPostgresIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", containsString("/api/meals")))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value("Breakfast"))
+                .andExpect(jsonPath("$.name").value("breakfast"))
                 .andExpect(jsonPath("$.foods").isArray())
                 .andExpect(jsonPath("$.foods[*].foodId", containsInAnyOrder(appleId, bananaId)))
                 .andReturn().getResponse().getContentAsString();
@@ -98,7 +98,7 @@ public class MealApiPostgresIntegrationTest {
         mockMvc.perform(get("/api/meals/{id}", mealId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(mealId))
-                .andExpect(jsonPath("$.name").value("Breakfast"))
+                .andExpect(jsonPath("$.name").value("breakfast"))
                 .andExpect(jsonPath("$.foods[*].foodId", containsInAnyOrder(appleId, bananaId)));
 
         Integer mealsCount = jdbc.queryForObject("SELECT COUNT(*) FROM meals", Integer.class);
@@ -117,6 +117,49 @@ public class MealApiPostgresIntegrationTest {
 
         assertThat(appleLink).isEqualTo(1);
         assertThat(bananaLink).isEqualTo(1);
+    }
+
+    @Test
+    void create_duplicateName_throws_duplicateNameException() throws Exception {
+
+        String appleId = createFood("Apple", 52.0, 0.3, 14.0, 0.2);
+        String bananaId = createFood("Banana", 89.0, 1.1, 23.0, 0.3);
+
+        Map<String, Object> mealRequest1 = new LinkedHashMap<>();
+        mealRequest1.put("name", "Breakfast");
+
+        mealRequest1.put("foods", List.of(
+                Map.of("foodId", appleId),
+                Map.of("foodId", bananaId)
+        ));
+
+        String mealJson1 = objectMapper.writeValueAsString(mealRequest1);
+
+        mockMvc.perform(post("/api/meals")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mealJson1))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", containsString("/api/meals")))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.name").value("breakfast"))
+                .andExpect(jsonPath("$.foods").isArray())
+                .andExpect(jsonPath("$.foods[*].foodId", containsInAnyOrder(appleId, bananaId)))
+                .andReturn().getResponse().getContentAsString();
+
+        mealRequest1.put("name", "    BREAKFAST    ");
+        String mealJson2 = objectMapper.writeValueAsString(mealRequest1);
+
+        mockMvc.perform(post("/api/meals").contentType(MediaType.APPLICATION_JSON)
+                .content(mealJson2))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.title").exists())
+                .andExpect(jsonPath("$.detail", containsString("breakfast")));
+
+        mockMvc.perform(get("/api/meals"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+        
     }
 
 

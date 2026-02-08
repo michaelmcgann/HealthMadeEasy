@@ -5,6 +5,7 @@ import com.mike.healthmadeeasy.domain.Meal;
 import com.mike.healthmadeeasy.domain.MealFoodLink;
 import com.mike.healthmadeeasy.dto.request.MealCreateRequest;
 import com.mike.healthmadeeasy.dto.request.MealFoodRequest;
+import com.mike.healthmadeeasy.exception.DuplicateMealException;
 import com.mike.healthmadeeasy.exception.FoodNotFoundException;
 import com.mike.healthmadeeasy.exception.MealNotFoundException;
 import com.mike.healthmadeeasy.repository.FoodRepository;
@@ -42,7 +43,8 @@ public class MealServiceImpl implements MealService {
     @Override
     public Meal create(MealCreateRequest request) {
 
-        String name = request.getName().trim();
+        String name = normalise(request.getName());
+        if (mealRepository.existsByName(name)) throw new DuplicateMealException(name);
 
         // Exacts Ids and removes duplicates
         List<UUID> ids = request.getFoods()
@@ -98,6 +100,10 @@ public class MealServiceImpl implements MealService {
                 throw new FoodNotFoundException(requestedId.toString());
             }
         }
+    }
+
+    private static String normalise(String s) {
+        return s == null ? null : s.trim().replaceAll("\\s+", " ").toLowerCase();
     }
 
 }

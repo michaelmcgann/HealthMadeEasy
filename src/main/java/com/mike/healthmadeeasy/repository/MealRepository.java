@@ -18,4 +18,8 @@ public interface MealRepository {
 
     void deleteById(UUID id);
 
+    boolean existsByName(String name);
+
+    boolean existsByNameExcludingId(String name, UUID excludeId);
+
 }
