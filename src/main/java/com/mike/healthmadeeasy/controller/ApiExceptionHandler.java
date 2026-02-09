@@ -1,9 +1,6 @@
 package com.mike.healthmadeeasy.controller;
 
-import com.mike.healthmadeeasy.exception.BadRequestException;
-import com.mike.healthmadeeasy.exception.DuplicateMealException;
-import com.mike.healthmadeeasy.exception.FoodNotFoundException;
-import com.mike.healthmadeeasy.exception.MealNotFoundException;
+import com.mike.healthmadeeasy.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -202,6 +199,7 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
+
     @ExceptionHandler(DuplicateMealException.class)
     public ResponseEntity<ProblemDetail> handleDuplicateMealName(DuplicateMealException exception,
                                                                  HttpServletRequest request) {
@@ -211,6 +209,20 @@ public class ApiExceptionHandler {
                 HttpStatus.CONFLICT,
                 "Duplicate meal name",
                 "Meal with name '" + name + "' already exists",
+                request
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+    }
+
+    @ExceptionHandler(DuplicateFoodException.class)
+    public ResponseEntity<ProblemDetail> handleDuplicateFoodName(DuplicateFoodException exception,
+                                                                 HttpServletRequest request) {
+
+        String name = exception.getMessage();
+        ProblemDetail problemDetail = baseProblem(
+                HttpStatus.CONFLICT,
+                "Duplicate food name",
+                "Food with name '" + name + "' already exists",
                 request
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
