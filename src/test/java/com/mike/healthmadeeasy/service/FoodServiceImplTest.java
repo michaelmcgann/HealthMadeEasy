@@ -40,6 +40,7 @@ public class FoodServiceImplTest {
         request.setFat(new BigDecimal("1"));
 
         when(foodRepository.save(any(Food.class))).thenAnswer(returnsFirstArg());
+        when(foodRepository.existsByName("apple")).thenReturn(false);
 
         Food created = foodService.create(request);
 
@@ -52,6 +53,7 @@ public class FoodServiceImplTest {
         assertEquals(0, created.getFatPerGram().compareTo(new BigDecimal("0.01")));
 
         verify(foodRepository, times(1)).save(any(Food.class));
+        verify(foodRepository, times(1)).existsByName("apple");
         verifyNoMoreInteractions(foodRepository);
 
     }
