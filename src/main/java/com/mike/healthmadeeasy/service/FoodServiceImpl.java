@@ -2,6 +2,7 @@ package com.mike.healthmadeeasy.service;
 
 import com.mike.healthmadeeasy.domain.Food;
 import com.mike.healthmadeeasy.dto.request.FoodCreateRequest;
+import com.mike.healthmadeeasy.exception.DuplicateFoodException;
 import com.mike.healthmadeeasy.exception.FoodNotFoundException;
 import com.mike.healthmadeeasy.repository.FoodRepository;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class FoodServiceImpl implements FoodService {
     public Food create( FoodCreateRequest request ) {
 
         String name                = normalise(request.getName());
+        if (foodRepository.existsByName(name)) throw new DuplicateFoodException(name);
         BigDecimal caloriesPerGram = normalisePerGram(request.getCalories(), request.getReferenceGrams());
         BigDecimal proteinPerGram  = normalisePerGram(request.getProtein(), request.getReferenceGrams());
         BigDecimal carbsPerGram    = normalisePerGram(request.getCarbs(), request.getReferenceGrams());
