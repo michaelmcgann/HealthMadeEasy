@@ -1,9 +1,14 @@
 # Health Made Easy App 
 
-A Spring Boot REST API for tracking daily nutrition. Removes all the "fluff" that comes with traditional fitness apps.
-Plans to extend to support exercise logging.
-The system is built around a clean domain model: Foods are stored per-gram, meals are composed of food items and grams, 
-and daily logs compute total macros.
+A project that was built to solve a problem I had, I wanted a simple macro tracking app without all the extras. 
+There are apps on the market, yet for what I wanted I believed they contained too much “fluff”.
+
+Three personal user stories that explain the flow of the app well are as follows:
+
+1. As a user I need to be able to save food items for repeated use. When initially entering the macros for said food item
+I can enter any macros per any weight in grams and the platform will normalise all macros to be stored per gram. This way,
+when reusing this food item, I simply enter the grams for this particular instance and the system will calculate the correct
+macros. I can then choose to save this as a log for future reference.
 
 Swagger UI can be accessed through the link below once app has started.
 http://localhost:8080/swagger-ui/index.html
