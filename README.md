@@ -5,10 +5,17 @@ There are apps on the market, yet for what I wanted I believed they contained to
 
 Three personal user stories that explain the flow of the app well are as follows:
 
-1. As a user I need to be able to save food items for repeated use. When initially entering the macros for said food item
+1. As a user I need to be able to save food items for repeated use. When initially entering the macros for said food item,
 I can enter any macros per any weight in grams and the platform will normalise all macros to be stored per gram. This way,
-when reusing this food item, I simply enter the grams for this particular instance and the system will calculate the correct
+when reusing this food item, I simply enter the grams for that particular instance and the system will calculate the correct
 macros. I can then choose to save this as a log for future reference.
+
+2. As a user I need to be able to save meals that are composed of one or more saved food items. Once a meal has been searched
+for and selected, I enter the weight in grams for each food item, and the total macros for the meal are calculated for me
+according to the grams entered for each food. 
+
+3. As a user I need to be able to save and retrieve food logs. I can search for any past date and be presented that days saved
+food logs with the total macros calculated and displayed.
 
 Swagger UI can be accessed through the link below once app has started.
 http://localhost:8080/swagger-ui/index.html
