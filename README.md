@@ -3,6 +3,21 @@
 A project that was built to solve a problem I had, I wanted a simple macro tracking app without all the extras. 
 There are apps on the market, yet for what I wanted I believed they contained too much “fluff”.
 
+## Tech Stack
+
+- Java 21
+- Spring Boot
+- Maven
+- Spring Boot Actuator
+- OpenAPI / Swagger UI (API documentation & manual testing)
+- PostgreSQL (production database)
+- Flyway (schema migrations)
+- Spring Data JPA (persistence)
+- Testcontainers (real DB integration testing in CI)
+- Spring Security and JWT (authentication and user ownership)
+- Docker and Docker Compose (local dev and deployment)
+- GitHub Actions (CI pipeline: build/test)
+
 Three personal user stories that explain the flow of the app well are as follows:
 
 1. As a user I need to be able to save food items for repeated use. When initially entering the macros for said food item,
@@ -59,21 +74,6 @@ Layered Spring Boot application:
 - Service (domain rules: per-gram conversion, meal totals, daily totals)
 - Repository (data access)
 - Database (PostgreSQL with Flyway migrations)
-
-## Tech Stack
-
-- Java 21
-- Spring Boot
-- Maven
-- Spring Boot Actuator
-- OpenAPI / Swagger UI (API documentation & manual testing)
-- PostgreSQL (production database)
-- Flyway (schema migrations)
-- Spring Data JPA (persistence)
-- Testcontainers (real DB integration testing in CI)
-- Spring Security and JWT (authentication and user ownership)
-- Docker and Docker Compose (local dev and deployment)
-- GitHub Actions (CI pipeline: build/test)
 
 ## Roadmap (sprints)
 - Sprint 0: Foundations and docs + running skeleton
