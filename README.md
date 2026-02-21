@@ -63,7 +63,7 @@ Layered Spring Boot application:
 ## Tech Stack
 
 - Java 21
-- Spring Boot (Web MVC)
+- Spring Boot
 - Maven
 - Spring Boot Actuator
 - OpenAPI / Swagger UI (API documentation & manual testing)
